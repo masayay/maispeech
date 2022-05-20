@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MAI Speech Recognition</title>
+  </head>
+  <body>
+    <h2>MAI Speech Recognition</h2>
+    <button id="start_btn">start</button>
+    <button id="stop_btn">Stop</button>
+    <small id="status"></small>
+    <label for="audioSource">Audio input source: </label><select id="audioSource"></select>
+    <h3>認識結果</h3>
+    <div id="show_result"></div>
+    <script id="speechRecognize" src="static/js/main.js"
+        channel_count="{{ channel_count }}"
+        sample_rate="{{ sample_rate }}"
+        sample_size="{{ sample_size }}" ></script>
+  </body>
+</html>

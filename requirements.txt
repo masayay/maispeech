@@ -1,0 +1,14 @@
+###### Requirements without Version Specifiers ######
+Jinja2
+aiofiles
+espnet_model_zoo
+
+###### Requirements with Version Specifiers ######`
+numpy>=1.17.4
+Pillow>=8.4.0
+pydantic>=1.8.2
+torch>=1.10.0+cu113
+fastapi>=0.70.0
+soundfile>=0.10.3
+torchaudio>=0.10.1
+espnet2>=0.10.5
