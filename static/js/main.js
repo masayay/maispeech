@@ -49,7 +49,7 @@ async function handleSuccess(stream) {
     
     // Send audio data
     connection.onopen = function(event) {
-        show_status.textContent = "認識中";
+        show_status.textContent = "Recognizing";
     
         // Send stream to websocket
         recorder.port.onmessage = msg => {
@@ -75,7 +75,7 @@ async function handleSuccess(stream) {
             context.close();
         }
         // Change status message
-        show_status.textContent= "停止中";
+        show_status.textContent= "Stopped";
     }
     
     // Speech recognition stop button

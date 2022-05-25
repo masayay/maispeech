@@ -9,7 +9,7 @@
     <button id="start_btn">start</button>
     <button id="stop_btn">stop</button>
     <small id="status"></small>
-    <h3>認識結果</h3>
+    <h3>Recognition Result</h3>
     <textarea id="show_progress" cols="100" rows="1"></textarea>        
     <div id="show_result"></div>
 </body>
@@ -33,16 +33,16 @@ const show_progress = document.getElementById('show_progress')
 const show_result = document.getElementById('show_result');
 
 recognition.onsoundstart = function(){
-  document.getElementById('status').innerHTML = "認識中";
+  document.getElementById('status').innerHTML = "Recognizing";
 };
 recognition.onnomatch = function(){
-  document.getElementById('status').innerHTML = "もう一度試してください";
+  document.getElementById('status').innerHTML = "Try again";
 };
 recognition.onerror= function(){
-  document.getElementById('status').innerHTML = "エラー";
+  document.getElementById('status').innerHTML = "ERROR";
 };
 recognition.onsoundend = function(){
-  document.getElementById('status').innerHTML = "停止中";
+  document.getElementById('status').innerHTML = "Stopped";
 };
 
 start_btn.addEventListener('click' , function() {
@@ -66,7 +66,7 @@ recognition.onresult = function(event){
       if(results[i].isFinal)
         show_result.innerHTML += '<div>'+ results[i][0].transcript +'</div>';
       else
-        show_progress.innerHTML = "[途中経過] "+ results[i][0].transcript;
+        show_progress.innerHTML = "[Progress] "+ results[i][0].transcript;
     }
 }
 </script>
