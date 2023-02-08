@@ -1,12 +1,16 @@
 ###### Requirements without Version Specifiers ######
+uvicorn[standard]
+Gunicorn
 Jinja2
 aiofiles
 espnet_model_zoo
+PyYAML
+python-multipart
 
 ###### Requirements with Version Specifiers ######`
 torch>=1.10.0+cu113
 torchaudio>=0.10.1
 numpy>=1.17.4
 fastapi>=0.70.0
-soundfile>=0.10.3
-espnet2>=0.10.5
+SoundFile>=0.10.3
+espnet>=0.10.5
