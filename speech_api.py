@@ -2,23 +2,16 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from logging import getLogger
-import conf
 from datetime import datetime, timedelta
-from speech_api_util import ConnectionManager
-"""
-Load Configuration
-"""
-# Logger
+from speech_recognition import ConnectionManager, ConfigLoader
+
+# Load config
+conf = ConfigLoader()
+
+# Set Logger
 logger = getLogger(conf.LOG_OUTPUT)
 logger.setLevel(conf.LOG_LEVEL)
 
-# Audio Configuration
-CHANNEL_COUNT = conf.CHANNEL_COUNT
-SAMPLE_RATE = conf.SAMPLE_RATE
-SAMPLE_SIZE = conf.SAMPLE_SIZE
-
-# Recognize Configuration
-RECOGNIZE_INTERVAL = conf.RECOGNIZE_INTERVAL
 """
 API Configuration
 """
@@ -42,16 +35,9 @@ async def speech_recognition(request: Request):
     Speech recorder test3
     """
     return templates.TemplateResponse("recognition.html", {"request": request,
-                                                         "channel_count": CHANNEL_COUNT,
-                                                         "sample_rate": SAMPLE_RATE,
-                                                         "sample_size": SAMPLE_SIZE})
-
-@app.get("/webspeech")
-async def webspeech1(request: Request):
-    """
-    Speech recognition test1
-    """
-    return templates.TemplateResponse("webspeech_api.html", {"request": request})
+                                                         "channel_count": conf.CHANNEL_COUNT,
+                                                         "sample_rate": conf.SAMPLE_RATE,
+                                                         "sample_size": conf.SAMPLE_SIZE})
 
 """
 Websocket
@@ -70,7 +56,7 @@ async def audio_process(websocket: WebSocket):
             await manager.receive_audio(websocket, key)
             
             # Recognize speech
-            if now - disp_time > timedelta(seconds = RECOGNIZE_INTERVAL):
+            if now - disp_time > timedelta(seconds = conf.RECOGNIZE_INTERVAL):
                 if manager.check_speech_interval(key):
                     text = manager.speech_recognize(key)
                     if text:

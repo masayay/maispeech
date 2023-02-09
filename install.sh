@@ -19,7 +19,6 @@ mkdir -p ${APP_DIR}/data
 ## Step3 Copy pkg
 cp static templates ${APP_DIR}/
 cp speech_*.py ${APP_DIR}/
-cp conf_sample.py ${APP_DIR}/conf.py
 
 ## Step4 Create gunicorn config file
 cat<<EOF> ${GUNICORN_CONF_DIR}/${GUNICORN_CONF_FILE}
@@ -59,11 +58,43 @@ loglevel = 'info'
 capture_output = True
 EOF
 
-## Step5 Create user
+## Step5 Create app config file
+cat<<EOF> ${APP_DIR}/config.ini
+[API]
+LOG_OUTPUT = gunicorn.error
+LOG_LEVEL = INFO
+API_TITLE = Speech Recognition API
+API_VERSION = 0.0.3
+
+[AUDIO]
+# Number of channel (1: Mono, 2:Stereo)
+CHANNEL_COUNT = 1
+# Sample rate (Only support 16000Hz)
+SAMPLE_RATE = 16000
+# Bitrate (16bit, 24bit) 
+SAMPLE_SIZE = 16
+# Save audio file or not (in production set False) 
+ENABLE_AUDIO_SAVE = True
+# Audio save directory
+AUDIO_DIR = ${APP_DIR}/data
+
+[APP]
+# Speech interval (1-2 sec)
+RECOGNIZE_INTERVAL = 1
+
+# Espnet ASR Model Japanese 16kHz
+#E2E_ASR_MODEL = "kan-bayashi/csj_asr_train_asr_transformer_raw_char_sp_valid.acc.ave"
+E2E_ASR_MODEL = Shinji Watanabe/laborotv_asr_train_asr_conformer2_latest33_raw_char_sp_valid.acc.ave
+
+# Model Cache directory
+CACHE_DIR = ${APP_DIR}/models
+EOF
+
+## Step6 Create user
 useradd -U -m -s /usr/sbin/nologin gunicorn
 chown -R gunicorn:gunicorn ${APP_DIR} ${GUNICORN_LOG_DIR} ${GUNICORN_CONF_DIR}
 
-## Step6: Define daemon
+## Step7: Define daemon
 cat<<EOF> /etc/systemd/system/maispeech.service
 [Unit]
 Description=maispeech daemon
@@ -82,8 +113,9 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
+systemctl start maispeech
 
-# Step7: Logrotate
+# Step8: Logrotate
 cat<<EOF> /etc/logrotate.d/gunicorn
 ${GUNICORN_LOG_DIR}/*.log
 {

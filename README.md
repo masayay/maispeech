@@ -1,4 +1,4 @@
-# Speech Recognizer API
+# Speech Recognition API
 Developed with Pytorch, ESPnet2 and Fastapi.
 
 ## Demo
@@ -21,14 +21,4 @@ systemctl stop maispeech
 
 ### Access with web browser
 http:/X.X.X.X:8000/
-
-
-## nginx configuration sample
-~~~
-apt install nginx
-cp nginx_sample.txt /etc/nginx/sites-available/maispeech
-rm -f /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/maispeech /etc/nginx/sites-enabled/maispeech
-systemctl start nginx
-~~~
 
