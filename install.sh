@@ -6,9 +6,9 @@ GUNICORN_LOG_DIR=/var/log/gunicorn
 GUNICORN_CONF_FILE=maispeech_conf.py
 
 ## Step1: Install required packages
-apt -y install python3
-apt -y install pip
-pip install -r requirements.txt
+#apt -y install python3
+#apt -y install pip
+#pip install -r requirements.txt
 
 ## Step2: Create Directory
 mkdir ${GUNICORN_CONF_DIR}
@@ -17,7 +17,7 @@ mkdir -p ${APP_DIR}/models
 mkdir -p ${APP_DIR}/data
 
 ## Step3 Copy pkg
-cp static templates ${APP_DIR}/
+cp -r static templates ${APP_DIR}/
 cp speech_*.py ${APP_DIR}/
 
 ## Step4 Create gunicorn config file
@@ -38,7 +38,7 @@ timeout = '300'
 #========================================
 # When using unix socket, access log cannot get 'access from ip' 
 #bind = 'unix:gunicorn.sock'
-bind = '127.0.0.1:8000'
+bind = '127.0.0.1:8001'
 
 # Worker Processes
 #========================================
@@ -64,7 +64,7 @@ cat<<EOF> ${APP_DIR}/config.ini
 LOG_OUTPUT = gunicorn.error
 LOG_LEVEL = INFO
 API_TITLE = Speech Recognition API
-API_VERSION = 0.0.3
+API_VERSION = 1.0.0
 
 [AUDIO]
 # Number of channel (1: Mono, 2:Stereo)
@@ -74,7 +74,7 @@ SAMPLE_RATE = 16000
 # Bitrate (16bit, 24bit) 
 SAMPLE_SIZE = 16
 # Save audio file or not (in production set False) 
-ENABLE_AUDIO_SAVE = True
+ENABLE_AUDIO_SAVE = False
 # Audio save directory
 AUDIO_DIR = ${APP_DIR}/data
 
@@ -83,8 +83,7 @@ AUDIO_DIR = ${APP_DIR}/data
 RECOGNIZE_INTERVAL = 1
 
 # Espnet ASR Model Japanese 16kHz
-#E2E_ASR_MODEL = "kan-bayashi/csj_asr_train_asr_transformer_raw_char_sp_valid.acc.ave"
-E2E_ASR_MODEL = Shinji Watanabe/laborotv_asr_train_asr_conformer2_latest33_raw_char_sp_valid.acc.ave
+E2E_ASR_MODEL = reazon-research/reazonspeech-espnet-next
 
 # Model Cache directory
 CACHE_DIR = ${APP_DIR}/models
@@ -133,4 +132,4 @@ ${GUNICORN_LOG_DIR}/*.log
 EOF
 
 echo "Successfully installed maispeech.service!"
-echo "You can connect on http:/127.0.0.1:8000/"
+echo "You can connect on http:/127.0.0.1:8001/"
