@@ -56,7 +56,7 @@ async def audio_process(websocket: WebSocket):
             await manager.receive_audio(websocket, key)
             
             # Recognize speech
-            if now - disp_time > timedelta(seconds = conf.RECOGNIZE_INTERVAL):
+            if now - disp_time > timedelta(milliseconds = conf.RECOGNIZE_INTERVAL):
                 if manager.check_speech_interval(key):
                     text = manager.speech_recognize(key)
                     if text:
